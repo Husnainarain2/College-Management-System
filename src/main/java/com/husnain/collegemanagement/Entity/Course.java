@@ -3,12 +3,11 @@ package com.husnain.collegemanagement.Entity;
 import jakarta.persistence.*;
 
 @Entity
-public class Teacher {
+public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String name;
-    private String email;
 
     @ManyToOne
     @JoinColumn(name = "department_id")
