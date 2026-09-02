@@ -26,11 +26,13 @@ public class TeacherService {
 
     }
 
-    public void updateTeacher(Long id, String name, String email) {
-        var teacher = teacherRepository.findById(id).orElseThrow(() -> new RuntimeException("Teacher not found"));
-        teacher.setName(name);
-        teacher.setEmail(email);
-        teacherRepository.save(teacher);
+    public Teacher updateTeacher(Long id,
+                           Teacher teacher) {
+        var existingTeacher = teacherRepository.findById(id).orElseThrow(() -> new RuntimeException("Teacher not found"));
+        existingTeacher.setName(teacher.getName());
+        existingTeacher.setEmail(teacher.getEmail());
+        teacherRepository.save(existingTeacher);
+        return existingTeacher;
     }
 
     public void deleteTeacherById(Long id) {
