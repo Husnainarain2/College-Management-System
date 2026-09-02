@@ -1,7 +1,9 @@
 package com.husnain.collegemanagement.Entity;
 
 import jakarta.persistence.*;
+import lombok.Data;
 
+@Data
 @Entity
 public class Teacher {
     @Id
