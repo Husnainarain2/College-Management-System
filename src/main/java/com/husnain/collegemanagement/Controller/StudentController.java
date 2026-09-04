@@ -1,7 +1,9 @@
 package com.husnain.collegemanagement.Controller;
 
+import com.husnain.collegemanagement.Dto.request.StudentRequestDto;
 import com.husnain.collegemanagement.Entity.Student;
 import com.husnain.collegemanagement.Service.StudentService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,9 +18,9 @@ public class StudentController {
         this.studentService = studentService;
     }
     @PostMapping
-    public ResponseEntity<Student> createStudent(@RequestBody Student student) {
-        Student createdStudent = studentService.createStudent(student);
-        return ResponseEntity.ok(createdStudent);
+    public ResponseEntity<String> createStudent(@Valid @RequestBody StudentRequestDto student) {
+        studentService.createStudent(student);
+        return ResponseEntity.ok("Student created successfully");
     }
     @GetMapping
     public ResponseEntity<List<Student>> findAllStudents() {

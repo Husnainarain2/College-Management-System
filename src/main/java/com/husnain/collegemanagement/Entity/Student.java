@@ -12,7 +12,7 @@ public class Student {
     private Long id;
     private String name;
     private String email;
-    private String age;
+    private int age;
 
     @ManyToOne
     @JoinColumn(name = "department_id")
