@@ -1,6 +1,7 @@
 package com.husnain.collegemanagement.Service;
 
 import com.husnain.collegemanagement.Dto.request.StudentRequestDto;
+import com.husnain.collegemanagement.Dto.response.StudentResponseDto;
 import com.husnain.collegemanagement.Dto.update.StudentUpdateDto;
 import com.husnain.collegemanagement.Entity.Department;
 import com.husnain.collegemanagement.Entity.Student;
@@ -21,25 +22,26 @@ public class StudentService {
         this.studentRepository = studentRepository;
     }
 
-    public void createStudent(StudentRequestDto studentDto) {
+    public StudentResponseDto createStudent(StudentRequestDto studentDto) {
         Student student = mapToEntity(studentDto);
         studentRepository.save(student);
+        return mapToDto(student);
     }
 
-    public List<Student> getAllStudents() {
-        return studentRepository.findAll();
+    public List<StudentResponseDto> getAllStudents() {
+        return studentRepository.findAll().stream().map(this::mapToDto).toList();
     }
-    public Student getStudentById(Long id) {
-        return studentRepository.findById(id).orElseThrow(() -> new RuntimeException("Student not found"));
+    public StudentResponseDto getStudentById(Long id) {
+        return mapToDto(studentRepository.findById(id).orElseThrow(() -> new RuntimeException("Student not found")));
     }
-    public Student updateStudent(Long id,
-                                 StudentUpdateDto studentDetails) {
+    public StudentResponseDto updateStudent(Long id,
+                                            StudentUpdateDto studentDetails) {
         Student student = studentRepository.findById(id).orElseThrow(() -> new RuntimeException("Student not found"));
         student.setId(id);
         student.setName(studentDetails.getName());
         student.setEmail(studentDetails.getEmail());
         studentRepository.save(student);
-        return student;
+        return mapToDto(student);
     }
     public void deleteStudentById(Long id) {
         Student student = studentRepository.findById(id).orElseThrow(() -> new RuntimeException("Student not found"));
@@ -57,5 +59,13 @@ public class StudentService {
         Department department = departmentService.getDepartmentById(student.getDepartmentId());
         entity.setDepartment(department);
         return entity;
+    }
+
+    public StudentResponseDto mapToDto(Student student) {
+        StudentResponseDto dto = new StudentResponseDto();
+        dto.setId(student.getId());
+        dto.setName(student.getName());
+        dto.setDepartmentName(student.getDepartment().getName());
+        return dto;
     }
 }
