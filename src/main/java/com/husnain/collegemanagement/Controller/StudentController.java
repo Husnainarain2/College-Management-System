@@ -1,6 +1,7 @@
 package com.husnain.collegemanagement.Controller;
 
 import com.husnain.collegemanagement.Dto.request.StudentRequestDto;
+import com.husnain.collegemanagement.Dto.update.StudentUpdateDto;
 import com.husnain.collegemanagement.Entity.Student;
 import com.husnain.collegemanagement.Service.StudentService;
 import jakarta.validation.Valid;
@@ -33,7 +34,7 @@ public class StudentController {
         return ResponseEntity.ok(student);
     }
     @PutMapping("/{id}")
-    public ResponseEntity<Student> updateStudent(@PathVariable Long id, @RequestBody Student studentDetails) {
+    public ResponseEntity<Student> updateStudent(@PathVariable Long id, @Valid @RequestBody StudentUpdateDto studentDetails) {
         Student updatedStudent = studentService.updateStudent(id, studentDetails);
         return ResponseEntity.ok(updatedStudent);
     }

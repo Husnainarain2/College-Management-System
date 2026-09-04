@@ -1,6 +1,7 @@
 package com.husnain.collegemanagement.Service;
 
 import com.husnain.collegemanagement.Dto.request.StudentRequestDto;
+import com.husnain.collegemanagement.Dto.update.StudentUpdateDto;
 import com.husnain.collegemanagement.Entity.Department;
 import com.husnain.collegemanagement.Entity.Student;
 import com.husnain.collegemanagement.Repository.StudentRepository;
@@ -31,9 +32,10 @@ public class StudentService {
     public Student getStudentById(Long id) {
         return studentRepository.findById(id).orElseThrow(() -> new RuntimeException("Student not found"));
     }
-    public Student updateStudent(Long id, Student studentDetails) {
+    public Student updateStudent(Long id,
+                                 StudentUpdateDto studentDetails) {
         Student student = studentRepository.findById(id).orElseThrow(() -> new RuntimeException("Student not found"));
-        student.setId(studentDetails.getId());
+        student.setId(id);
         student.setName(studentDetails.getName());
         student.setEmail(studentDetails.getEmail());
         studentRepository.save(student);
