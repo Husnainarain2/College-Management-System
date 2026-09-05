@@ -1,7 +1,11 @@
 package com.husnain.collegemanagement.Controller;
 
+import com.husnain.collegemanagement.Dto.request.TeacherRequestDto;
+import com.husnain.collegemanagement.Dto.response.TeacherResponseDto;
+import com.husnain.collegemanagement.Dto.update.TeacherUpdateDto;
 import com.husnain.collegemanagement.Entity.Teacher;
 import com.husnain.collegemanagement.Service.TeacherService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,8 +20,8 @@ public class TeacherController {
         this.teacherService = teacherService;
     }
     @GetMapping("/{id}")
-    public ResponseEntity<Teacher> findTeacherById(@PathVariable long id) {
-        Teacher teacher = teacherService.findById(id);
+    public ResponseEntity<TeacherResponseDto> findTeacherById(@PathVariable long id) {
+        TeacherResponseDto teacher = teacherService.findById(id);
         if (teacher != null) {
             return ResponseEntity.ok(teacher);
         } else {
@@ -25,19 +29,20 @@ public class TeacherController {
         }
     }
     @PostMapping
-    public ResponseEntity<Teacher> createTeacher(@RequestBody Teacher teacher) {
-        Teacher createdTeacher = teacherService.createTeacher(teacher);
+    public ResponseEntity<TeacherResponseDto> createTeacher(@Valid @RequestBody TeacherRequestDto teacher) {
+        TeacherResponseDto createdTeacher =
+                teacherService.createTeacher(teacher);
         return ResponseEntity.status(201).body(createdTeacher);
     }
     @PutMapping("/{id}")
-    public ResponseEntity<Teacher> updateTeacher(@PathVariable Long id, @RequestBody Teacher teacher) {
-       Teacher updatedTeacher = teacherService.updateTeacher(id, teacher);
+    public ResponseEntity<TeacherResponseDto> updateTeacher(@PathVariable Long id,@Valid @RequestBody TeacherUpdateDto teacherUpdateDto) {
+       TeacherResponseDto updatedTeacher = teacherService.updateTeacher(id, teacherUpdateDto);
         return ResponseEntity.ok(updatedTeacher);
     }
 
     @GetMapping
-    public ResponseEntity<List<Teacher>> findAllTeachers() {
-        List<Teacher> teachers = teacherService.findAllTeachers();
+    public ResponseEntity<List<TeacherResponseDto>> findAllTeachers() {
+        List<TeacherResponseDto> teachers = teacherService.findAllTeachers();
         return ResponseEntity.ok(teachers);
     }
     @DeleteMapping("/{id}")
