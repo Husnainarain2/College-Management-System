@@ -3,9 +3,12 @@ package com.husnain.collegemanagement.Service;
 import com.husnain.collegemanagement.Dto.request.TeacherRequestDto;
 import com.husnain.collegemanagement.Dto.response.TeacherResponseDto;
 import com.husnain.collegemanagement.Dto.update.TeacherUpdateDto;
+import com.husnain.collegemanagement.Entity.Student;
 import com.husnain.collegemanagement.Entity.Teacher;
 import com.husnain.collegemanagement.Exceptions.ResourceNotFoundException;
 import com.husnain.collegemanagement.Repository.TeacherRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -19,8 +22,9 @@ public class TeacherService {
         this.teacherRepository = teacherRepository;
         this.departmentService = departmentService;
     }
-    public List<TeacherResponseDto> findAllTeachers() {
-        return teacherRepository.findAll().stream().map(this::mapToResponseDto).collect(java.util.stream.Collectors.toList());
+    public Page<TeacherResponseDto> findAllTeachers(Pageable  pageable) {
+        Page<Teacher> teachers = teacherRepository.findAll(pageable);
+        return teachers.map(this::mapToResponseDto);
     }
 
     public TeacherResponseDto createTeacher(TeacherRequestDto teacherRequestDto) {
@@ -50,8 +54,13 @@ public class TeacherService {
         teacherRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Teacher not found with id "+id));
         teacherRepository.deleteById(id);
     }
-
-
+    public Page<TeacherResponseDto> searchTeachers(String name,Pageable pageable) {
+        Page<Teacher> teachers  = teacherRepository.findByNameContainingIgnoreCase(name, pageable);
+        if (teachers.isEmpty()) {
+            throw new ResourceNotFoundException("Teacher not found with name "+name);
+        }
+        return teachers.map(this::mapToResponseDto);
+    }
     public Teacher mapToEntity(TeacherRequestDto teacherRequestDto) {
         Teacher teacher = new Teacher();
         teacher.setName(teacherRequestDto.getName());

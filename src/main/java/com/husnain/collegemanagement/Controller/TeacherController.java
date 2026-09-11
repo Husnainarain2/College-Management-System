@@ -6,6 +6,8 @@ import com.husnain.collegemanagement.Dto.update.TeacherUpdateDto;
 import com.husnain.collegemanagement.Entity.Teacher;
 import com.husnain.collegemanagement.Service.TeacherService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -41,14 +43,19 @@ public class TeacherController {
     }
 
     @GetMapping
-    public ResponseEntity<List<TeacherResponseDto>> findAllTeachers() {
-        List<TeacherResponseDto> teachers = teacherService.findAllTeachers();
+    public ResponseEntity<Page<TeacherResponseDto>> findAllTeachers(Pageable pageable) {
+        Page<TeacherResponseDto> teachers = teacherService.findAllTeachers(pageable);
         return ResponseEntity.ok(teachers);
     }
     @DeleteMapping("/{id}")
     public ResponseEntity<String> deleteTeacherById(@PathVariable Long id) {
         teacherService.deleteTeacherById(id);
         return ResponseEntity.ok("Teacher deleted successfully");
+    }
+    @GetMapping("/search")
+    public ResponseEntity<Page<TeacherResponseDto>> searchTeachers(@RequestParam String name, Pageable pageable) {
+        Page<TeacherResponseDto>  teachers = teacherService.searchTeachers(name, pageable);
+        return ResponseEntity.ok(teachers);
     }
 
 }
