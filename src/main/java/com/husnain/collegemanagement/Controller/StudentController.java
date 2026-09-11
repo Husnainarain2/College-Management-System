@@ -6,6 +6,8 @@ import com.husnain.collegemanagement.Dto.update.StudentUpdateDto;
 import com.husnain.collegemanagement.Entity.Student;
 import com.husnain.collegemanagement.Service.StudentService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -25,9 +27,9 @@ public class StudentController {
         return ResponseEntity.ok(createdStudent);
     }
     @GetMapping
-    public ResponseEntity<List<StudentResponseDto>> findAllStudents() {
-        List<StudentResponseDto> students =
-                studentService.getAllStudents();
+    public ResponseEntity<Page<StudentResponseDto>> findAllStudents(Pageable pageable) {
+        Page<StudentResponseDto> students =
+                studentService.getAllStudents(pageable);
         return ResponseEntity.ok(students);
     }
     @GetMapping("/{id}")
@@ -47,4 +49,10 @@ public class StudentController {
         studentService.deleteStudentById(id);
         return ResponseEntity.ok("Student deleted successfully");
     }
+    @GetMapping("/search")
+    public ResponseEntity<List<StudentResponseDto>> findStudentsByName(@RequestParam String name) {
+        List<StudentResponseDto> searchStudent=studentService.searchStudent(name);
+        return ResponseEntity.ok(searchStudent);
+    }
+
 }

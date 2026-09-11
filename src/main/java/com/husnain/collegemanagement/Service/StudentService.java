@@ -9,6 +9,9 @@ import com.husnain.collegemanagement.Exceptions.DuplicateResourceException;
 import com.husnain.collegemanagement.Exceptions.ResourceNotFoundException;
 import com.husnain.collegemanagement.Mapper.StudentMap;
 import com.husnain.collegemanagement.Repository.StudentRepository;
+import org.hibernate.query.Page;
+import org.springframework.boot.data.autoconfigure.web.DataWebProperties;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,8 +36,9 @@ public class StudentService {
         return mapToDto(student);
     }
 
-    public List<StudentResponseDto> getAllStudents() {
-        return studentRepository.findAll().stream().map(this::mapToDto).toList();
+    public org.springframework.data.domain.Page<StudentResponseDto> getAllStudents(Pageable pageable) {
+        org.springframework.data.domain.Page<Student> students = studentRepository.findAll(pageable);
+        return students.map(this::mapToDto);
     }
     public StudentResponseDto getStudentById(Long id) {
         return mapToDto(studentRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Student not found with id "+id)));
@@ -53,6 +57,17 @@ public class StudentService {
         Student student =
                 studentRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Student not found with id "+id));
         studentRepository.delete(student);
+    }
+
+    public List<StudentResponseDto> searchStudent(String name) {
+        List<Student> students =
+                studentRepository.findByNameContainingIgnoreCase(name);
+        if (students.isEmpty()) {
+            throw new ResourceNotFoundException("Students not found with name " + name);
+        }
+        return students.
+                stream().map(this::mapToDto)
+                .toList();
     }
 
 
