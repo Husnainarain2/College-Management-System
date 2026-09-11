@@ -9,8 +9,8 @@ import com.husnain.collegemanagement.Exceptions.DuplicateResourceException;
 import com.husnain.collegemanagement.Exceptions.ResourceNotFoundException;
 import com.husnain.collegemanagement.Mapper.StudentMap;
 import com.husnain.collegemanagement.Repository.StudentRepository;
-import org.hibernate.query.Page;
 import org.springframework.boot.data.autoconfigure.web.DataWebProperties;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -59,15 +59,13 @@ public class StudentService {
         studentRepository.delete(student);
     }
 
-    public List<StudentResponseDto> searchStudent(String name) {
-        List<Student> students =
-                studentRepository.findByNameContainingIgnoreCase(name);
+    public Page<StudentResponseDto> searchStudent(String name,Pageable  pageable) {
+        Page<Student> students =
+                studentRepository.findByNameContainingIgnoreCase(name,pageable);
         if (students.isEmpty()) {
             throw new ResourceNotFoundException("Students not found with name " + name);
         }
-        return students.
-                stream().map(this::mapToDto)
-                .toList();
+        return students.map(this::mapToDto);
     }
 
 

@@ -50,8 +50,8 @@ public class StudentController {
         return ResponseEntity.ok("Student deleted successfully");
     }
     @GetMapping("/search")
-    public ResponseEntity<List<StudentResponseDto>> findStudentsByName(@RequestParam String name) {
-        List<StudentResponseDto> searchStudent=studentService.searchStudent(name);
+    public ResponseEntity<Page<StudentResponseDto>> findStudentsByName(@RequestParam String name,Pageable  pageable) {
+        Page<StudentResponseDto> searchStudent=studentService.searchStudent(name,pageable);
         return ResponseEntity.ok(searchStudent);
     }
 
