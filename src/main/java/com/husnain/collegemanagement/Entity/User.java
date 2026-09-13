@@ -12,8 +12,8 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(unique = true, nullable = false)
-    private String userName;
+    @Column(name = "username",unique = true, nullable = false)
+    private String username;
     @Column( nullable = false)
     private String password;
     @Column(unique = true, nullable = false)
@@ -32,11 +32,11 @@ public class User {
     }
 
     public String getUserName() {
-        return userName;
+        return username;
     }
 
     public void setUserName(String userName) {
-        this.userName = userName;
+        this.username = userName;
     }
 
     public String getPassword() {

@@ -8,13 +8,16 @@ import jakarta.validation.constraints.Size;
 
 public class RegisterRequestDto {
 
-    @NotBlank(message = "UserName is required")
+    @NotBlank(message = "Username is required")
     private String username;
     @NotBlank(message = "Email is Required")
     private String email;
     @NotBlank(message = "Password not null ")
     @Size(min = 6, message = "Password must contain at least 6 characters")
     private  String password;
+
+    @NotNull(message = "Role is required")
+    private Role role;
 
     public String getUsername() {
         return username;
@@ -47,8 +50,5 @@ public class RegisterRequestDto {
     public void setRole(Role role) {
         this.role = role;
     }
-
-    @NotNull(message = "Role is required")
-    private Role role;
 
 }

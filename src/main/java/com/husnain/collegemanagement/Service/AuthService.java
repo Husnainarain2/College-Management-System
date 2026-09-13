@@ -40,18 +40,19 @@ public class AuthService {
         user.setPassword(passwordEncoder.encode(registerRequestDto.getPassword()));
 
         user.setRole(registerRequestDto.getRole());
-
+        userRepository.save(user);
         return "User registered successfully";
     }
 
     public LoginResponseDto login(LoginRequestDto loginRequestDto) {
+
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        loginRequestDto.getUserName(),
+                        loginRequestDto.getUsername(),
                         loginRequestDto.getPassword()
                 )
         );
-        User user = userRepository.findByUsername(loginRequestDto.getUserName()).orElseThrow(() ->
+        User user = userRepository.findByUsername(loginRequestDto.getUsername()).orElseThrow(() ->
                 new UsernameNotFoundException("Username not found"));
 
         String token =jwtService.generateToken(user);
