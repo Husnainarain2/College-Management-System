@@ -30,6 +30,10 @@ public class TeacherController {
             return ResponseEntity.notFound().build();
         }
     }
+    @GetMapping("/profile")
+    public ResponseEntity<String> getProfile() {
+        return ResponseEntity.ok("Welcome teacher ");
+    }
     @PostMapping
     public ResponseEntity<TeacherResponseDto> createTeacher(@Valid @RequestBody TeacherRequestDto teacher) {
         TeacherResponseDto createdTeacher =

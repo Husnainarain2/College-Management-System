@@ -58,6 +58,10 @@ public class StudentService {
                 studentRepository.findById(id).orElseThrow(() -> new ResourceNotFoundException("Student not found with id "+id));
         studentRepository.delete(student);
     }
+    public StudentResponseDto getStudentByUserName(String username) {
+        Student s1=studentRepository.getStudentByname(username).orElseThrow(() -> new ResourceNotFoundException("Student not found with username "+username));
+        return mapToDto(s1);
+    }
 
     public Page<StudentResponseDto> searchStudent(String name,Pageable  pageable) {
         Page<Student> students =

@@ -3,12 +3,14 @@ package com.husnain.collegemanagement.Controller;
 import com.husnain.collegemanagement.Dto.request.StudentRequestDto;
 import com.husnain.collegemanagement.Dto.response.StudentResponseDto;
 import com.husnain.collegemanagement.Dto.update.StudentUpdateDto;
+import com.husnain.collegemanagement.Entity.Role;
 import com.husnain.collegemanagement.Entity.Student;
 import com.husnain.collegemanagement.Service.StudentService;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,6 +27,12 @@ public class StudentController {
     public ResponseEntity<StudentResponseDto> createStudent(@Valid @RequestBody StudentRequestDto student) {
         StudentResponseDto createdStudent = studentService.createStudent(student);
         return ResponseEntity.ok(createdStudent);
+    }
+
+    @GetMapping("/profile")
+    public ResponseEntity<StudentResponseDto> getProfile(Authentication authentication) {
+        String username = authentication.getName();
+        return ResponseEntity.ok(studentService.getStudentByUserName(username));
     }
     @GetMapping
     public ResponseEntity<Page<StudentResponseDto>> findAllStudents(Pageable pageable) {

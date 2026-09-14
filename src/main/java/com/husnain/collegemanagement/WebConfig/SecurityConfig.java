@@ -103,11 +103,16 @@ public class SecurityConfig {
                         ).permitAll().
                                 requestMatchers(
                                 "/admin/**"
-                        ).hasRole("ADMIN").requestMatchers(
-                                "/teacher/**"
-                        ).hasRole("TEACHER").requestMatchers(
-                                "/student/**"
-                        ).hasRole("STUDENT").
+                        ).hasRole("ADMIN")
+                                .requestMatchers(
+                                        "/teachers",
+                                        "/teachers/**"
+                        ).hasRole("TEACHER")
+                                .requestMatchers(
+                                        "/students",
+                                        "/students/**"
+                        ).hasRole("STUDENT")
+                                        .
                                 anyRequest().authenticated()
                 ).
                 oauth2ResourceServer(oauth2 ->
