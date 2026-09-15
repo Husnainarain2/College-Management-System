@@ -1,11 +1,9 @@
 package com.husnain.collegemanagement.Entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
 
-@Data
 @Entity
-public class Teacher {
+public class Admin {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -24,18 +22,6 @@ public class Teacher {
     @OneToOne
     @JoinColumn(name = "user_id", unique = true)
     private User user;
-
-
-    public Teacher() {
-    }
-
-    public Teacher(Long id, String name, String email, Department department, User user) {
-        this.id = id;
-        this.name = name;
-        this.email = email;
-        this.department = department;
-        this.user = user;
-    }
 
     public Long getId() {
         return id;

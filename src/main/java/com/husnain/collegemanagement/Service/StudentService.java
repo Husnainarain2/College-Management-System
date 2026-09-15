@@ -59,7 +59,13 @@ public class StudentService {
         studentRepository.delete(student);
     }
     public StudentResponseDto getStudentByUserName(String username) {
-        Student s1=studentRepository.getStudentByname(username).orElseThrow(() -> new ResourceNotFoundException("Student not found with username "+username));
+        Student s1=studentRepository.findByUserUsername(username).orElseThrow(() -> new ResourceNotFoundException("Student not found with username "+username));
+        return mapToDto(s1);
+    }
+
+    public StudentResponseDto getProfile(String username) {
+        Student s1=studentRepository.findByUserUsername(username).orElseThrow(() ->
+                new ResourceNotFoundException("Student not found with username "+username));
         return mapToDto(s1);
     }
 

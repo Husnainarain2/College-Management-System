@@ -1,23 +1,31 @@
 package com.husnain.collegemanagement.Dto.request;
 
 import com.husnain.collegemanagement.Entity.Role;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.Data;
 
-
+@Data
 public class RegisterRequestDto {
 
-    @NotBlank(message = "Username is required")
+    @NotBlank
     private String username;
-    @NotBlank(message = "Email is Required")
-    private String email;
-    @NotBlank(message = "Password not null ")
-    @Size(min = 6, message = "Password must contain at least 6 characters")
-    private  String password;
 
-    @NotNull(message = "Role is required")
+    @NotBlank
+    private String password;
+
+    @Email
+    @NotBlank
+    private String email;
+
+    @NotNull
     private Role role;
+
+    private String name;
+
+    private Long departmentId;
 
     public String getUsername() {
         return username;
@@ -25,6 +33,10 @@ public class RegisterRequestDto {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    public String getPassword() {
+        return password;
     }
 
     public String getEmail() {
@@ -35,20 +47,22 @@ public class RegisterRequestDto {
         this.email = email;
     }
 
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
     public Role getRole() {
         return role;
     }
 
-    public void setRole(Role role) {
-        this.role = role;
+    public String getName() {
+        return name;
     }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Long getDepartmentId() {
+        return departmentId;
+    }
+
+
 
 }

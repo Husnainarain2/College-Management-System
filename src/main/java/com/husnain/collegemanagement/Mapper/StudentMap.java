@@ -20,7 +20,6 @@ public class StudentMap {
         Student entity = new Student();
         entity.setName(student.getName());
         entity.setEmail(student.getEmail());
-        entity.setAge(student.getAge());
         Department department = departmentService.getDepartmentById(student.getDepartmentId());
         entity.setDepartment(department);
         return entity;

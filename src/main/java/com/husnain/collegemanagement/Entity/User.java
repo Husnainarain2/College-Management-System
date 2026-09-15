@@ -12,10 +12,13 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(name = "username",unique = true, nullable = false)
+
+    @Column(unique = true, nullable = false)
     private String username;
-    @Column( nullable = false)
+
+    @Column(nullable = false)
     private String password;
+
     @Column(unique = true, nullable = false)
     private String email;
 
@@ -31,12 +34,12 @@ public class User {
         this.id = id;
     }
 
-    public String getUserName() {
+    public String getUsername() {
         return username;
     }
 
-    public void setUserName(String userName) {
-        this.username = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {

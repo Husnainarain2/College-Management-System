@@ -32,7 +32,8 @@ public class StudentController {
     @GetMapping("/profile")
     public ResponseEntity<StudentResponseDto> getProfile(Authentication authentication) {
         String username = authentication.getName();
-        return ResponseEntity.ok(studentService.getStudentByUserName(username));
+        return ResponseEntity.ok(studentService.getProfile(username)
+        );
     }
     @GetMapping
     public ResponseEntity<Page<StudentResponseDto>> findAllStudents(Pageable pageable) {
