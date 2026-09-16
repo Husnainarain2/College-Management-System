@@ -1,5 +1,6 @@
 package com.husnain.collegemanagement.Dto.request;
 
+import com.husnain.collegemanagement.Entity.User;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -14,5 +15,10 @@ public class TeacherRequestDto {
     private String email;
     @NotNull
     private Long departmentId;
+
+    @NotBlank(message = "Password is required")
+    private  String password;
+
+
 
 }

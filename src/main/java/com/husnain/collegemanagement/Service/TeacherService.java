@@ -3,12 +3,18 @@ package com.husnain.collegemanagement.Service;
 import com.husnain.collegemanagement.Dto.request.TeacherRequestDto;
 import com.husnain.collegemanagement.Dto.response.TeacherResponseDto;
 import com.husnain.collegemanagement.Dto.update.TeacherUpdateDto;
+import com.husnain.collegemanagement.Entity.Role;
 import com.husnain.collegemanagement.Entity.Student;
 import com.husnain.collegemanagement.Entity.Teacher;
+import com.husnain.collegemanagement.Entity.User;
 import com.husnain.collegemanagement.Exceptions.ResourceNotFoundException;
 import com.husnain.collegemanagement.Repository.TeacherRepository;
+import com.husnain.collegemanagement.Repository.UserRepository;
+import com.husnain.collegemanagement.Security.JwtService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,10 +23,16 @@ import java.util.List;
 public class TeacherService {
     private final TeacherRepository teacherRepository;
     private final DepartmentService departmentService;
+    private final PasswordEncoder passwordEncoder;
+    private final UserRepository  userRepository;
 
-    public TeacherService(TeacherRepository teacherRepository, DepartmentService departmentService) {
+    public TeacherService(TeacherRepository teacherRepository, DepartmentService departmentService,
+                          PasswordEncoder passwordEncoder,
+                         UserRepository  userRepository) {
         this.teacherRepository = teacherRepository;
         this.departmentService = departmentService;
+        this.passwordEncoder = passwordEncoder;
+        this.userRepository = userRepository;
     }
     public Page<TeacherResponseDto> findAllTeachers(Pageable  pageable) {
         Page<Teacher> teachers = teacherRepository.findAll(pageable);
@@ -32,6 +44,13 @@ public class TeacherService {
         if (existsByEmail(teacherRequestDto.getEmail())) {
             throw new ResourceNotFoundException("Teacher not found with name"+teacher.getName());
         }
+        User user=new User();
+        user.setId(teacher.getId());
+        user.setEmail(teacherRequestDto.getEmail());
+        user.setUsername(teacher.getName());
+        user.setRole(Role.TEACHER);
+        user.setPassword(passwordEncoder.encode(teacherRequestDto.getPassword()));
+        userRepository.save(user);
         return mapToResponseDto(teacherRepository.save(teacher));
     }
 

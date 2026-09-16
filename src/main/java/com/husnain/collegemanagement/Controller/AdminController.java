@@ -1,5 +1,6 @@
 package com.husnain.collegemanagement.Controller;
 
+import com.husnain.collegemanagement.Dto.request.StudentRequestDto;
 import com.husnain.collegemanagement.Dto.request.TeacherRequestDto;
 import com.husnain.collegemanagement.Dto.response.StudentResponseDto;
 import com.husnain.collegemanagement.Dto.response.TeacherResponseDto;
@@ -16,6 +17,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/admin")
@@ -43,16 +46,30 @@ public class AdminController {
     public ResponseEntity<String> dashboard() {
         return ResponseEntity.ok("Welcome to Admin dashboard");
     }
-    @PostMapping("/departments")
-    public ResponseEntity<String> departments(@RequestBody Department department) {
-        departmentService.createDepartment(department);
-        return ResponseEntity.ok("Create department successfully");
+    @PostMapping
+    public ResponseEntity<Department> createDepartment(@RequestBody Department department) {
+        Department createdDepartment = departmentService.createDepartment(department);
+        return ResponseEntity.ok(createdDepartment);
+    }
+    @GetMapping("/departments/{id}")
+    public ResponseEntity<Department> findDepartmentById(@PathVariable Long id) {
+        Department department = departmentService.getDepartmentById(id);
+        return ResponseEntity.ok(department);
+    }
+    @GetMapping("/departments")
+    public ResponseEntity<List<Department>> findAllDepartments() {
+        List<Department> departments = departmentService.getAllDepartments();
+        return ResponseEntity.ok(departments);
     }
     @PutMapping("/departments/{id}")
-    public ResponseEntity<String> updateDepartment(@PathVariable Long id,
-                                                   @RequestBody Department department) {
-        departmentService.updateDepartment(id,department);
-        return ResponseEntity.ok("update  Department successfully");
+    public ResponseEntity<Department> updateDepartment(@PathVariable Long id, @RequestBody Department departmentDetails) {
+        Department updatedDepartment = departmentService.updateDepartment(id, departmentDetails);
+        return ResponseEntity.ok(updatedDepartment);
+    }
+    @DeleteMapping("/departments/{id}")
+    public ResponseEntity<String> deleteDepartmentById(@PathVariable Long id) {
+        departmentService.deleteDepartmentById(id);
+        return ResponseEntity.ok("Department deleted successfully");
     }
     @PostMapping("/teachers")
     public ResponseEntity<String> teachers(@RequestBody TeacherRequestDto teacherRequestDto) {
@@ -68,6 +85,18 @@ public class AdminController {
     public ResponseEntity<String> deleteTeacher(@PathVariable Long id) {
         teacherService.deleteTeacherById(id);
         return ResponseEntity.ok("Delete teacher successfully");
+    }
+    @PostMapping("/students")
+    public ResponseEntity<StudentResponseDto> createStudent(@Valid @RequestBody StudentRequestDto student) {
+        StudentResponseDto createdStudent = studentService.createStudent(student);
+        return ResponseEntity.ok(createdStudent);
+    }
+
+    @GetMapping("/students")
+    public ResponseEntity<Page<StudentResponseDto>> findAllStudents(Pageable pageable) {
+        Page<StudentResponseDto> students =
+                studentService.getAllStudents(pageable);
+        return ResponseEntity.ok(students);
     }
     @GetMapping("/students/{id}")
     public ResponseEntity<StudentResponseDto> findStudentById(@PathVariable Long id) {
